@@ -1,7 +1,0 @@
-Thu Oct 14 15:25:20 ICT 2021
-Geometric mean: 3.412562
-Arithmetic mean: 4.168750
-Max: 8.700000
-Min: 1.000000
-Sum: 66.700000
-Variance: 6.158292
