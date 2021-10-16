@@ -1,8 +1,0 @@
-Thu Oct 14 16:06:42 ICT 2021
-
-Geometric mean: NaN
-Arithmetic mean: 2.656250
-Max: 8.700000
-Min: -6.600000
-Sum: 42.500000
-Variance: 17.102625
