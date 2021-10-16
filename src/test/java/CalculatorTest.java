@@ -1,4 +1,4 @@
-import com.tool.NumberChecker;
+import com.calculator.tool.Checker;
 import org.junit.Test;
 
 import static org.junit.Assert.assertTrue;
@@ -6,10 +6,10 @@ import static org.junit.Assert.assertTrue;
 public class CalculatorTest {
     @Test
     public void checkNumberTest() {
-        assertTrue(NumberChecker.checkNumber(9));
-        assertTrue(NumberChecker.checkNumber(-7));
-        assertTrue(NumberChecker.checkNumber(-20));
-        assertTrue(NumberChecker.checkNumber(20));
-        assertTrue(NumberChecker.checkNumber(0));
+        assertTrue(Checker.checkNumberInRange(9));
+        assertTrue(Checker.checkNumberInRange(-7));
+        assertTrue(Checker.checkNumberInRange(-20));
+        assertTrue(Checker.checkNumberInRange(20));
+        assertTrue(Checker.checkNumberInRange(0));
     }
 }
