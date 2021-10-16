@@ -1,15 +1,6 @@
-package com.calculator.tool;
-
-import com.calculator.service.Operator;
+package com.calculator.math;
 
 public class Calculator {
-
-    public static boolean checkBinaryOperator(Operator op) {
-        return op == Operator.SUM ||
-                op == Operator.SUBTRACT ||
-                op == Operator.MULTIPLY ||
-                op == Operator.DIVIDE;
-    }
 
     public static double square(double A) {
         return A * A;

@@ -2,60 +2,59 @@ package com.calculator;
 
 import com.calculator.io.FileWriter;
 import com.calculator.io.TextFileWriter;
-import com.calculator.tool.NumberChecker;
+import com.calculator.math.Calculator;
+import com.calculator.math.Operator;
+import com.calculator.tool.Checker;
+import com.calculator.tool.NumberConverter;
+import org.jetbrains.annotations.NotNull;
 
+import java.io.IOException;
 import java.util.Scanner;
 
-import static java.lang.System.exit;
-import static java.lang.System.in;
+public class CalculatorApp {
 
-public class Calculator {
+    private double firstNum, secondNum, result;
+    private Operator opUsed;
 
-    private static String fileOutput = "src/main/resources/OutputData.txt";
-
-    private double firstNum;
-    private double secondNum;
-    private Scanner scan;
     private boolean hasFirstNumber;
+    private Scanner scan;
     private FileWriter fileWriter;
 
-    public Calculator() {
-        firstNum = 0;
-        secondNum = 0;
-        scan = new Scanner(System.in);
+    // Initial function
+    public CalculatorApp(String fileOutput) {
         hasFirstNumber = false;
+        scan = new Scanner(System.in);
         fileWriter = new TextFileWriter(fileOutput);
     }
 
-    public void run() {
+    public void run() throws IOException {
 
-        printInputNumber();
+        printInputMessage();
         inputNumber();
-
         printMenu();
-        Option opt = pickAnOption();
-        if()
-        executeOption(opt);
+        opUsed = pickAnOption();
+
+        // If operator is binary, ask for the second number
+        if(Checker.checkBinaryOperator(opUsed)) {
+            printInputMessage();
+            inputNumber();
+        }
+        execCalculatedOpt(opUsed);
+        printResult();
+        saveDataToFile();
     }
 
-    public void setFirstNum(double firstNum) {
-        this.firstNum = firstNum;
-    }
-
-    public void setSecondNum(double secondNum) {
-        this.secondNum = secondNum;
-    }
-
+    // Scan and check the number input
     private void inputNumber() {
 
         double num;
         do {
             num = scan.nextDouble();
-            if (!NumberChecker.checkNumber(num)) {
+            if (!Checker.checkNumberInRange(num)) {
                 System.out.println("Accept only number in range from -20 to 20.");
-                printInputNumber();
+                printInputMessage();
             }
-        } while (!NumberChecker.checkNumber(num));
+        } while (!Checker.checkNumberInRange(num));
 
         if(!hasFirstNumber) {
             firstNum = num;
@@ -67,88 +66,108 @@ public class Calculator {
         }
     }
 
-    private Option pickAnOption() {
+    // Read the choice of user and convert to Calculator Option
+    private Operator pickAnOption() {
         int option;
 
         do {
             System.out.print("Pick an option: ");
             option = scan.nextInt();
 
-            if(option < 0 || option > 5) {
-                System.out.println("Invalid option, please try again.");
+            if(option < 0 || option >= Operator.values().length) {
+                System.out.println("Invalid option, please try again...");
             }
-        } while (option < 0 || option > 5);
+        } while (option < 0 || option >= Operator.values().length);
 
-        return Option.values()[option];
+        return Operator.values()[option];
     }
 
-    private void executeOption(Option op) {
+    // Calculate numbers and save the result
+    private void execCalculatedOpt(@NotNull Operator op) {
         switch (op) {
             case SQUARE:
-                setFirstNum(sum(firstNum, secondNum));
-                printRes(firstNum);
+                setResult(Calculator.square(firstNum));
                 break;
             case SQUARE_ROOT:
-                setFirstNum();
-                printRes(firstNum);
+                setResult(Calculator.square_root(firstNum));
                 break;
             case SUM:
-                setFirstNum(sum(firstNum, secondNum));
-                printRes(firstNum);
+                setResult(Calculator.sum(firstNum, secondNum));
                 break;
             case SUBTRACT:
-                setFirstNum(minus(firstNum, secondNum));
-                printRes(firstNum);
+                setResult(Calculator.subtract(firstNum, secondNum));
                 break;
-            case MULTIPLY:     //Multiplication
-                setFirstNum(multiply(firstNum, secondNum));
-                printRes(firstNum);
+            case MULTIPLY:
+                setResult(Calculator.multiply(firstNum, secondNum));
                 break;
-            case DIVIDE:     //Division
-                setFirstNum(divide(firstNum, secondNum));
-                printRes(firstNum);
+            case DIVIDE:
+                setResult(Calculator.divide(firstNum, secondNum));
                 break;
             default:
                 break;
         }
     }
 
-    public void printInputNumber() {
-        System.out.print("Input a number: ");
+    public void printInputMessage() {
+        if(!hasFirstNumber) {
+            System.out.print("Input number x: ");
+        }
+        else {
+            System.out.print("Input number y: ");
+        }
     }
 
     public void printMenu() {
-        System.out.println("---option----");
-        System.out.println("0: 1/x\t1: x^2");
-        System.out.println("2: +\t3: -\n" +
-                "4: *\t5: /");
+        System.out.println("Options");
+        System.out.println("0: x^2      1: x^(1/2)");
+        System.out.println("2: x + y    3: x - y\n" +
+                           "4: x * y    5: x/y");
     }
 
-    public void printRes(double res) {
-        System.out.println("---result----");
-        if (res % 1 == 0) {
-            System.out.println((int)res);
-            fileWriter.writeFile((int)res);
+    public void printResult() {
+        System.out.println("---------------");
+        System.out.println(NumberConverter.toString(getResult()));
+    }
+
+    // Save the last calculation to file
+    public void saveDataToFile() throws IOException {
+        String str = "Calculation:\n";
+
+        String x = NumberConverter.toString(firstNum);
+        String y = NumberConverter.toString(secondNum);
+        String res = NumberConverter.toString(result);
+
+        switch (opUsed) {
+            case SQUARE:
+                str = x + "^2 = " + res;
+                break;
+            case SQUARE_ROOT:
+                str = x + "^(1/2) = " + res;
+                break;
+            case SUM:
+                str = x + " + " + y + " = " + res;
+                break;
+            case SUBTRACT:
+                str = x + " - " + y + " = " + res;
+                break;
+            case MULTIPLY:
+                str = x + " * " + y + " = " + res;
+                break;
+            case DIVIDE:
+                str = x + "/" + y + " = " + res;
+                break;
+            default:
+                break;
         }
-        else {
-            System.out.println(res);
-            fileWriter.writeFile(res);
-        }
+
+        fileWriter.writeFile(str);
     }
 
-    public double sum(double firstNum, double secondNum) {
-        return firstNum + secondNum;
+    protected void setResult(double res) {
+        this.result = res;
     }
 
-    public double minus(double firstNum, double secondNum) {
-        return firstNum - secondNum;
-    }
-
-    public double divide(double firstNum, double secondNum) {
-        return firstNum / secondNum;
-    }
-
-    public double multiply(double firstNum, double secondNum) {
-        return firstNum * secondNum;
+    public double getResult() {
+        return result;
     }
 }

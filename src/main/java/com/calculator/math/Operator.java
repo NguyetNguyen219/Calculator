@@ -1,4 +1,4 @@
-package com.calculator.service;
+package com.calculator.math;
 
 public enum Operator {
     SQUARE,
