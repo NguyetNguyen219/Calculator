@@ -4,7 +4,7 @@ import com.calculator.io.FileWriter;
 import com.calculator.io.TextFileWriter;
 import com.calculator.math.Calculator;
 import com.calculator.math.Operator;
-import com.calculator.tool.Checker;
+import com.calculator.tool.NumberChecker;
 import com.calculator.tool.NumberConverter;
 import org.jetbrains.annotations.NotNull;
 
@@ -16,6 +16,7 @@ public class CalculatorApp {
     private double firstNum, secondNum, result;
     private Operator opUsed;
 
+    private String fileOutput;
     private boolean hasFirstNumber;
     private Scanner scan;
     private FileWriter fileWriter;
@@ -24,7 +25,7 @@ public class CalculatorApp {
     public CalculatorApp(String fileOutput) {
         hasFirstNumber = false;
         scan = new Scanner(System.in);
-        fileWriter = new TextFileWriter(fileOutput);
+        this.fileOutput = fileOutput;
     }
 
     public void run() throws IOException {
@@ -35,7 +36,7 @@ public class CalculatorApp {
         opUsed = pickAnOption();
 
         // If operator is binary, ask for the second number
-        if(Checker.checkBinaryOperator(opUsed)) {
+        if(NumberChecker.checkBinaryOperator(opUsed)) {
             printInputMessage();
             inputNumber();
         }
@@ -50,11 +51,11 @@ public class CalculatorApp {
         double num;
         do {
             num = scan.nextDouble();
-            if (!Checker.checkNumberInRange(num)) {
+            if (!NumberChecker.checkNumberInRange(num)) {
                 System.out.println("Accept only number in range from -20 to 20.");
                 printInputMessage();
             }
-        } while (!Checker.checkNumberInRange(num));
+        } while (!NumberChecker.checkNumberInRange(num));
 
         if(!hasFirstNumber) {
             firstNum = num;
@@ -76,6 +77,7 @@ public class CalculatorApp {
 
             if(option < 0 || option >= Operator.values().length) {
                 System.out.println("Invalid option, please try again...");
+                printMenu();
             }
         } while (option < 0 || option >= Operator.values().length);
 
@@ -131,8 +133,9 @@ public class CalculatorApp {
 
     // Save the last calculation to file
     public void saveDataToFile() throws IOException {
-        String str = "Calculation:\n";
+        fileWriter = new TextFileWriter(fileOutput);
 
+        String str = "Calculation:\n";
         String x = NumberConverter.toString(firstNum);
         String y = NumberConverter.toString(secondNum);
         String res = NumberConverter.toString(result);
@@ -161,6 +164,23 @@ public class CalculatorApp {
         }
 
         fileWriter.writeFile(str);
+        System.out.println("*Result saved in ../" + fileOutput);
+    }
+
+    public double getFirstNum() {
+        return firstNum;
+    }
+
+    public void setFirstNum(double firstNum) {
+        this.firstNum = firstNum;
+    }
+
+    public double getSecondNum() {
+        return secondNum;
+    }
+
+    public void setSecondNum(double secondNum) {
+        this.secondNum = secondNum;
     }
 
     protected void setResult(double res) {
