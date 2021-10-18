@@ -4,8 +4,6 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.util.Date;
 
-import static java.lang.System.exit;
-
 public class TextFileWriter implements FileWriter {
 
     private BufferedWriter writer;
