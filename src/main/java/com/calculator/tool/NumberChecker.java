@@ -2,7 +2,7 @@ package com.calculator.tool;
 
 import com.calculator.math.Operator;
 
-public class Checker {
+public class NumberChecker {
 
     public static boolean checkNumberInRange(double num) {
         return (num >= -20 && num <= 20);
