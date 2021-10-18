@@ -4,7 +4,7 @@ import java.io.IOException;
 
 public class Main {
 
-    private static String file = "src/main/resources/OutputData.txt";
+    private static final String file = "src/main/resources/OutputData.txt";
 
     public static void main(String[] args) {
 

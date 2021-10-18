@@ -1,4 +1,4 @@
-import com.calculator.tool.NumberChecker;
+import com.calculator.tool.ExtentChecker;
 import org.junit.Test;
 
 import static org.junit.Assert.assertFalse;
@@ -7,19 +7,19 @@ import static org.junit.Assert.assertTrue;
 public class NumberTest {
     @Test
     public void checkNumberTestPositive() {
-        assertTrue(NumberChecker.checkNumberInRange(19));
-        assertTrue(NumberChecker.checkNumberInRange(-7));
-        assertTrue(NumberChecker.checkNumberInRange(-20));
-        assertTrue(NumberChecker.checkNumberInRange(20));
-        assertTrue(NumberChecker.checkNumberInRange(0));
+        assertTrue(ExtentChecker.checkNumberInRange(19));
+        assertTrue(ExtentChecker.checkNumberInRange(-7));
+        assertTrue(ExtentChecker.checkNumberInRange(-20));
+        assertTrue(ExtentChecker.checkNumberInRange(20));
+        assertTrue(ExtentChecker.checkNumberInRange(0));
     }
     @Test
     public void checkNumberTestNegative() {
-        assertFalse(NumberChecker.checkNumberInRange(29));
-        assertFalse(NumberChecker.checkNumberInRange(-41));
-        assertFalse(NumberChecker.checkNumberInRange(-20.5));
-        assertFalse(NumberChecker.checkNumberInRange(80));
-        assertFalse(NumberChecker.checkNumberInRange(101));
+        assertFalse(ExtentChecker.checkNumberInRange(29));
+        assertFalse(ExtentChecker.checkNumberInRange(-41));
+        assertFalse(ExtentChecker.checkNumberInRange(-20.5));
+        assertFalse(ExtentChecker.checkNumberInRange(80));
+        assertFalse(ExtentChecker.checkNumberInRange(101));
     }
 
 }

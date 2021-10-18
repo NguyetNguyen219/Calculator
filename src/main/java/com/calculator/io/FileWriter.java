@@ -4,5 +4,7 @@ import java.io.IOException;
 
 public interface FileWriter {
 
-    public void writeFile(String str) throws IOException;
+    String getFileName();
+
+    void writeFile(String str) throws IOException;
 }
