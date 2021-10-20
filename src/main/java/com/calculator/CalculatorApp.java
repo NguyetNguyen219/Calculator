@@ -40,10 +40,9 @@ public class CalculatorApp {
                 inputNumber();
             }
             // If there are math errors
-            if(!execCalculation(operator)) {
+            if (!execCalculation(operator)) {
                 System.out.println("Warning: cannot divide by 0.");
-            }
-            else {
+            } else {
                 printResult();
                 saveDataToFile();
             }
@@ -57,13 +56,12 @@ public class CalculatorApp {
         while (true) {
             printInputMessage();
             // If the input has double type
-            if(scan.hasNextDouble()) {
+            if (scan.hasNextDouble()) {
                 num = scan.nextDouble();
                 // Check if the input is correct in range [-20, 20] -> break the loop
-                if(ExtentChecker.checkNumberInRange(num))
+                if (ExtentChecker.checkNumberInRange(num))
                     break;
-            }
-            else {
+            } else {
                 scan.next();
             }
             printInvalidNumberMessage();
@@ -85,9 +83,9 @@ public class CalculatorApp {
         while (true) {
             System.out.print("Pick an option: ");
 
-            if(scan.hasNextInt()) {
+            if (scan.hasNextInt()) {
                 option = scan.nextInt();
-                if(option >= 0 && option < Operator.values().length)
+                if (option >= 0 && option < Operator.values().length)
                     break;
             } else {
                 scan.next();
@@ -108,7 +106,7 @@ public class CalculatorApp {
             case SUBTRACT -> setResult(Calculator.subtract(firstNum, secondNum));
             case MULTIPLY -> setResult(Calculator.multiply(firstNum, secondNum));
             case DIVIDE -> {
-                if(secondNum == 0)
+                if (secondNum == 0)
                     return false;
                 setResult(Calculator.divide(firstNum, secondNum));
             }
@@ -130,7 +128,7 @@ public class CalculatorApp {
 
             if (!ExtentChecker.checkValidYesNoAns(choice))
                 printWrongAnswerMessage();
-        } while(!ExtentChecker.checkValidYesNoAns(choice));
+        } while (!ExtentChecker.checkValidYesNoAns(choice));
 
         return choice.toLowerCase().contains("y");
     }
@@ -172,11 +170,14 @@ public class CalculatorApp {
     // Save the last calculation to file
     public void saveDataToFile() throws IOException {
 
-        String x = String.valueOf(firstNum);
-        String y = String.valueOf(secondNum);
-        String res = String.valueOf(result);
+        String content = String.valueOf(firstNum) +
+                StringMaker.makeStringCalculation(operator);
 
-        fileWriter.writeFile(StringMaker.makeStringCalculation(x, y, operator, res));
+        if (ExtentChecker.checkBinaryOperator(operator))
+            content += String.valueOf(secondNum);
+
+        fileWriter.writeFile(content + " = " + String.valueOf(result));
+
         System.out.println("*Result saved in ../" + fileWriter.getFileName());
     }
 
